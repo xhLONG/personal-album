@@ -1,0 +1,22 @@
+{
+  "name": "personal-album",
+  "version": "1.0.0",
+  "description": "个人在线相册",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "在线相册"
+  ],
+  "author": "小黑龙",
+  "license": "ISC",
+  "dependencies": {
+    "colorthief": "^2.4.0",
+    "dayjs": "^1.11.7",
+    "exif": "^0.6.0",
+    "fs-extra": "^11.1.0",
+    "image-size": "^1.0.2",
+    "images": "^3.2.3"
+  }
+}
