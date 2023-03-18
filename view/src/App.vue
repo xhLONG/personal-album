@@ -1,10 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 export default defineComponent({
-  setup() {
-    const str = 'destroyEvent'
-    console.log(str)
-  },
+  setup() {},
 })
 </script>
 

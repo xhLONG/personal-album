@@ -1,30 +1,57 @@
 name: Deploy
 
+# 触发条件： 在push到master分支后
 on:
   push:
     branches:
       - main
 
+# 任务
 jobs:
   build-and-deploy:
+    # 服务器环境：最新版 ubuntu
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [14.x]
     steps:
+      # 拉取代码
       - uses: actions/checkout@v2
+      # 使用node
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install and Build
-        run: |
-          npm run pre
-          npm run build
+      # 使用多路径的缓存帮助构建
+      - name: Cache multiple paths
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/cache
+            !~/cache/exclude
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+      # 安装项目依赖
+      - name: Install Dependencies
+        run: npm run pre
+      # 编译项目到静态文件
+      - name: Build Static
+        run: npm run build
+      # 打印当前工作目录
+      - name: Run a one-line script
+        run: pwd
+      # 部署到 github pages
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          # 部署到gh-pages分支
           BRANCH: gh-pages
+          # 部署目录（项目打包后的输出目录）
           FOLDER: docs
-          verbose: true  # 打开输出
+          # 打开输出
+          verbose: true
+
+
+# github action 教程 http://jpsite.gitee.io/blog/views/life/github-actions.html
+# github action 介绍 https://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html

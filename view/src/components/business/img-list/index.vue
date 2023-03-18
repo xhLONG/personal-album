@@ -1,23 +1,12 @@
-
-<template>
-  <div class="list" ref="listEl" :style="{ height: type === 0 ? listHeight + 'px' : '' }">
-    <div class="datetime">{{currentDate}}</div>
-    <div @click="changeType" class="button">切换样式</div>
-    <div class="img-box" :style="{ position: type === 0 ? 'absolute' : '', width: `${img.w}px`, height: `${img.h}px`, margin: img.m, left: `${img.left}px`, top: `${img.top}px` }" v-for="(img, i) in list" :index="i" :key="'img' + i">
-      <my-image @click="change($event, img)" :src="img.show" :data="img" />
-    </div>
-  </div>
-</template>
-
 <script>
-import { defineComponent, reactive, toRefs, nextTick, watch, onMounted } from 'vue'
-import myImage from '@/components/common/image.vue'
+import { defineComponent, nextTick, onMounted, reactive, toRefs, watch } from 'vue'
 import waterfall from './waterfall'
 import bookcase from './bookcase'
+import myImage from '@/components/common/image.vue'
 
 export default defineComponent({
   name: 'ImgList',
-  components: { myImage },
+  components: { MyImage: myImage },
   props: {
     data: {
       default: () => [],
@@ -28,8 +17,8 @@ export default defineComponent({
       listEl: null,
       list: [],
       listHeight: 0,
-      type: 1,  // 页面样式类别：元素等宽或者等高
-      currentDate: ''
+      type: 0, // 页面样式类别：元素等宽或者等高
+      currentDate: '',
     })
     // state.dateStr = computed(() => )
 
@@ -39,7 +28,7 @@ export default defineComponent({
       state.currentDate = state.list[0].dateStr
       document.body.addEventListener('scroll', () => {
         const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-        const index = state.list.findIndex(x => x.top >= scrollTop)
+        const index = state.list.findIndex((x) => x.top >= scrollTop)
         state.currentDate = state.list[index].dateStr
       })
     })
@@ -85,7 +74,7 @@ export default defineComponent({
             observer.unobserve(item.target) // 停止监听该div DOM节点
           }
         })
-      }) //不传options参数，默认根元素为浏览器视口
+      }) // 不传options参数，默认根元素为浏览器视口
       document.querySelectorAll('.img-box').forEach((div) => observer.observe(div)) // 遍历监听所有div DOM节点
     }
 
@@ -97,6 +86,18 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <div ref="listEl" class="list" :style="{ height: type === 0 ? `${listHeight}px` : '' }">
+    <div class="datetime">
+      {{ currentDate }}
+    </div>
+    <div class="button" @click="changeType">切换样式</div>
+    <div v-for="(img, i) in list" :key="`img${i}`" class="img-box" :style="{ position: type === 0 ? 'absolute' : '', width: `${img.w}px`, height: `${img.h}px`, margin: img.m, left: `${img.left}px`, top: `${img.top}px` }" :index="i">
+      <MyImage :src="img.show" :data="img" @click="change($event, img)" />
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .list {

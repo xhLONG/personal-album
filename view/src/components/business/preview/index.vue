@@ -1,26 +1,14 @@
-<template>
-  <modal :style="{ '--delay_time': delay }" v-model="show">
-    <div @click.stop="tap" ref="wrap" :style="{ ...style, transformOrigin: origin, transform: `translate(${offset.left}px, ${offset.top}px) scale(${scale},${scale})` }" class="wrap"></div>
-    <div class="info">
-      <div v-for="(d, di) in details" :key="'d' + di">{{ d.name }}: {{ d.value }}</div>
-    </div>
-    <loading v-show="isLoading" />
-    <div v-show="size" class="download"><span @click.stop="showRaw" class="btn">查看原图 ({{size}})</span></div>
-  </modal>
-  <!-- <div style="position: fixed; z-index: 9999999; color: #fff; top: 0; left: 0">{{ test }}</div> -->
-</template>
-
 <script>
-import modal from '@/components/common/modal.vue'
-import { defineComponent, onMounted, nextTick, toRefs, reactive, watch } from 'vue'
+import { defineComponent, nextTick, onMounted, reactive, toRefs, watch } from 'vue'
 // import getExif from './getExif'
 import simulate from './simulate'
+import modal from '@/components/common/modal.vue'
 // import changeStyle from './changeStyle'
 import loading from '@/components/common/loading.vue'
 
 export default defineComponent({
   name: 'Preview',
-  components: { modal, loading },
+  components: { Modal: modal, Loading: loading },
   props: {},
   setup(props, context) {
     const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent)
@@ -37,7 +25,7 @@ export default defineComponent({
       delay: `${isMobile ? 0 : 0.3}s`,
       details: [], // 照片信息
       isLoading: false,
-      size: 0
+      size: 0,
     })
 
     let initialData = { offset: {}, origin: 'center', scale: 1 }
@@ -45,7 +33,7 @@ export default defineComponent({
     let startPoint = { x: 0, y: 0 }
     let isTouching = false
     let isMoving = null // 正在移动中，与点击做区别
-    let touches = new Map() // 触摸点数组
+    const touches = new Map() // 触摸点数组
     let lastDistance = 0
     let lastScale = 1 // 记录下最后的缩放值
     let scaleOrigin = {
@@ -57,7 +45,7 @@ export default defineComponent({
 
     onMounted(async () => {
       await nextTick()
-      window.addEventListener('pointerdown', function (e) {
+      window.addEventListener('pointerdown', (e) => {
         e.preventDefault()
         touches.set(e.pointerId, e) // 点击：存入触摸点
         isTouching = true
@@ -68,7 +56,7 @@ export default defineComponent({
           lastScale = state.scale
         }
       })
-      window.addEventListener('pointerup', function (e) {
+      window.addEventListener('pointerup', (e) => {
         touches.delete(e.pointerId) // 抬起：移除触摸点
         if (touches.size <= 0) {
           isTouching = false
@@ -80,9 +68,7 @@ export default defineComponent({
         setTimeout(() => {
           isMoving = false
         }, 300)
-        if (!isMobile) {
-          state.delay = '0.3s' // 让PC滚轮缩放更平滑，移动端则不加动画，会掉帧
-        }
+        if (!isMobile) state.delay = '0.3s' // 让PC滚轮缩放更平滑，移动端则不加动画，会掉帧
       })
       window.addEventListener('pointermove', (e) => {
         if (isTouching) {
@@ -105,7 +91,7 @@ export default defineComponent({
           }
         }
       })
-      window.addEventListener('pointercancel', function (e) {
+      window.addEventListener('pointercancel', (e) => {
         touches.clear() // 可能存在特定事件导致中断，真机操作时 pointerup 在某些边界情况下不会生效，所以需要清空
       })
     })
@@ -129,9 +115,8 @@ export default defineComponent({
     const zoom = (event) => {
       state.origin = `${event.offsetX}px ${event.offsetY}px`
 
-      if (!event.deltaY) {
-        return
-      }
+      if (!event.deltaY) return
+
       event.preventDefault()
       // 缩放执行
       if (event.deltaY < 0) {
@@ -171,7 +156,7 @@ export default defineComponent({
 
       state.wrap.appendChild(cloneEl)
       // state.offset = { top: top, left: left }
-      state.style = { top: top + 'px', left: left + 'px', width: offsetWidth + 'px' }
+      state.style = { top: `${top}px`, left: `${left}px`, width: `${offsetWidth}px` }
       state.show = true
       state.delay = '.3s'
       await nextTick()
@@ -186,12 +171,12 @@ export default defineComponent({
             // state.wrap.firstChild.style.width = offsetWidth * ratio + 'px'
             // state.offset = { left: offsetDistance.left - ((ratio - 1) * offsetWidth) / 2, top: offsetDistance.top - ((ratio - 1) * offsetHeight) / 2 }
             state.offset = { left: offsetDistance.left - left - diffs.left, top: offsetDistance.top - top - diffs.top }
-            state.style = { top: top + 'px', left: left + 'px', width: offsetWidth * ratio + 'px' }
+            state.style = { top: `${top}px`, left: `${left}px`, width: `${offsetWidth * ratio}px` }
             // 消除偏差
             setTimeout(() => {
               state.delay = '0s'
               state.offset = { left: offsetDistance.left - diffs.left, top: offsetDistance.top - diffs.top }
-              state.style = { top: '0px', left: '0px', width: offsetWidth * ratio + 'px' }
+              state.style = { top: '0px', left: '0px', width: `${offsetWidth * ratio}px` }
               // 动画结束
               init()
             }, 300)
@@ -218,9 +203,8 @@ export default defineComponent({
       const { offsetWidth: w, offsetHeight: h } = originalEl
       let scale = 0
       scale = winWidth / w
-      if (h * scale > winHeight - 80) {
-        scale = (winHeight - 80) / h
-      }
+      if (h * scale > winHeight - 80) scale = (winHeight - 80) / h
+
       return scale
     }
 
@@ -270,7 +254,7 @@ export default defineComponent({
             const { top, left, width } = originInitial
             state.delay = '.3s'
             state.offset = { left, top }
-            state.style = { width: width + 'px' }
+            state.style = { width: `${width}px` }
             setTimeout(() => {
               state.show = false
             }, 300)
@@ -284,9 +268,7 @@ export default defineComponent({
       if (isChange) {
         // 还原初始状态
         for (const key in initialData) {
-          if (Object.prototype.hasOwnProperty.call(initialData, key)) {
-            state[key] = initialData[key]
-          }
+          if (Object.prototype.hasOwnProperty.call(initialData, key)) state[key] = initialData[key]
         }
       } else {
         state.scale = state.scale + 2
@@ -307,9 +289,8 @@ export default defineComponent({
     // 获取距离
     function getDistance() {
       const touchArr = Array.from(touches)
-      if (touchArr.length < 2) {
-        return 0
-      }
+      if (touchArr.length < 2) return 0
+
       const start = touchArr[0][1]
       const end = touchArr[1][1]
       return Math.hypot(end.x - start.x, end.y - start.y)
@@ -325,6 +306,19 @@ export default defineComponent({
 })
 </script>
 
+<template>
+  <Modal v-model="show" :style="{ '--delay_time': delay }">
+    <div ref="wrap" :style="{ ...style, transformOrigin: origin, transform: `translate(${offset.left}px, ${offset.top}px) scale(${scale},${scale})` }" class="wrap" @click.stop="tap" />
+    <div class="info">
+      <div v-for="(d, di) in details" :key="`d${di}`">{{ d.name }}: {{ d.value }}</div>
+    </div>
+    <Loading v-show="isLoading" />
+    <div v-show="size" class="download">
+      <span class="btn" @click.stop="showRaw">查看原图 ({{ size }})</span>
+    </div>
+  </Modal>
+  <!-- <div style="position: fixed; z-index: 9999999; color: #fff; top: 0; left: 0">{{ test }}</div> -->
+</template>
 
 <style lang="scss" scoped>
 .wrap {
@@ -342,9 +336,10 @@ export default defineComponent({
 // }
 .info {
   padding: 0 0.5rem;
-  display: flex;
   width: 100%;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -352,9 +347,8 @@ export default defineComponent({
   padding-bottom: calc(6px + constant(safe-area-inset-bottom));
   padding-bottom: calc(6px + env(safe-area-inset-bottom));
   div {
-    margin-bottom: 0.4rem;
-    width: 50%;
     font-size: 12px;
+    padding: 8px 0;
   }
 }
 .download {
