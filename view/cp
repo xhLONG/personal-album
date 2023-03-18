@@ -4,6 +4,7 @@ target="../docs"
 set -e
 
 rm -rf ${target}*
+mkdir ${target}
 mv -f dist/* ${target}
 
 echo -e "\n打包成功...\n"
