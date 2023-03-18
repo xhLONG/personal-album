@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+target="../docs"
+set -e
+
+rm -rf ${target}*
+mv -f dist/* ${target}
+
+echo -e "\n打包成功...\n"
+exit

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development vite",
     "dev:prod": "cross-env NODE_ENV=production vite",
-    "build": "cross-env NODE_ENV=production && vite build",
+    "build": "cross-env NODE_ENV=production && vite build && sh cp",
     "preview": "vite preview"
   },
   "dependencies": {
