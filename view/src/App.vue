@@ -8,7 +8,6 @@ export default defineComponent({
   setup() {
     const str = 'destroyEvent'
     console.log(str)
-    console.log('jj')
   },
 })
 </script>
