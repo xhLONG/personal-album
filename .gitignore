@@ -116,6 +116,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-docs/
 view/public
 view/src/assets/data/datalist.json

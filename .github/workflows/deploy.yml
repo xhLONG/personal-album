@@ -26,4 +26,5 @@ jobs:
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: view/dist
+          FOLDER: docs
+          verbose: true  # 打开输出
