@@ -15,7 +15,7 @@ fse.ensureFileSync(config.generatePhotoDataPath)
 fse.ensureDirSync(config.generatePhotoDir)
 
 fse.readdir(basePath, async function (err, files) {
-  console.log(files)
+  console.log('图片总数量：', files.length)
   //遍历读取到的文件列表
   for (let i = 0; i < files.length; i++) {
     const filename = files[i]
