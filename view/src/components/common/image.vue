@@ -1,10 +1,3 @@
-<template>
-  <div class="img">
-    <img v-show="!loading" :src="src" :raw="data.url" :date="data.datetime" @load="loadDone" />
-    <div v-if="loading" class="color" :style="{ background: data.color }" />
-  </div>
-</template>
-
 <script>
 import { defineComponent, ref, watch } from 'vue'
 
@@ -22,13 +15,20 @@ export default defineComponent({
     }
 
     watch(() => props.src, () => {
-        loading.value = true
+      loading.value = true
     })
 
     return { loading, loadDone }
   },
 })
 </script>
+
+<template>
+  <div class="img">
+    <img v-show="!loading" :src="src" :raw="data.url" :date="data.datetime" @load="loadDone">
+    <div v-if="loading" class="color" :style="{ background: data.color }" />
+  </div>
+</template>
 
 <style scoped>
 .img {

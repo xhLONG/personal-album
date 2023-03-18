@@ -7,7 +7,8 @@ const fetch = (url, params, type) => {
       headers: {},
       params,
     })
-  } else {
+  }
+  else {
     return axios[type](url, params, {
       headers: {},
     })

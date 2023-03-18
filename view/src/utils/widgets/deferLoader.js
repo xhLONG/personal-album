@@ -3,7 +3,8 @@ export default (type, url) => {
     const link_element = document.createElement(type)
     if (type === 'script') {
       link_element.setAttribute('src', url)
-    } else if (type === 'link') {
+    }
+    else if (type === 'link') {
       link_element.setAttribute('rel', 'stylesheet')
       link_element.setAttribute('href', url)
     }

@@ -28,7 +28,7 @@ export default defineComponent({
       state.currentDate = state.list[0].dateStr
       document.body.addEventListener('scroll', () => {
         const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-        const index = state.list.findIndex((x) => x.top >= scrollTop)
+        const index = state.list.findIndex(x => x.top >= scrollTop)
         state.currentDate = state.list[index].dateStr
       })
     })
@@ -75,7 +75,7 @@ export default defineComponent({
           }
         })
       }) // 不传options参数，默认根元素为浏览器视口
-      document.querySelectorAll('.img-box').forEach((div) => observer.observe(div)) // 遍历监听所有div DOM节点
+      document.querySelectorAll('.img-box').forEach(div => observer.observe(div)) // 遍历监听所有div DOM节点
     }
 
     return {
@@ -92,7 +92,9 @@ export default defineComponent({
     <div class="datetime">
       {{ currentDate }}
     </div>
-    <div class="button" @click="changeType">切换样式</div>
+    <div class="button" @click="changeType">
+      切换样式
+    </div>
     <div v-for="(img, i) in list" :key="`img${i}`" class="img-box" :style="{ position: type === 0 ? 'absolute' : '', width: `${img.w}px`, height: `${img.h}px`, margin: img.m, left: `${img.left}px`, top: `${img.top}px` }" :index="i">
       <MyImage :src="img.show" :data="img" @click="change($event, img)" />
     </div>

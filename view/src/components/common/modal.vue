@@ -1,12 +1,5 @@
-
-<template>
-  <div v-show="show" @click="close" :class="['modal']">
-    <slot />
-  </div>
-</template>
-
 <script>
-import { defineComponent, onMounted, nextTick, toRefs, reactive, watch } from 'vue'
+import { defineComponent, reactive, toRefs, watch } from 'vue'
 
 export default defineComponent({
   props: {
@@ -45,6 +38,11 @@ export default defineComponent({
 })
 </script>
 
+<template>
+  <div v-show="show" class="modal" @click="close">
+    <slot />
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .modal {

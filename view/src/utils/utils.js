@@ -1,4 +1,3 @@
-
 import app_config from '@/config'
 export const config = app_config
 
@@ -9,11 +8,10 @@ export const config = app_config
 export const transformDate = (date) => {
   const weekDay = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
   const myDate = new Date(date.replace(/-/g, '/'))
-  if (weekDay[myDate.getDay()]) {
+  if (weekDay[myDate.getDay()])
     return weekDay[myDate.getDay()]
-  } else {
+  else
     return ''
-  }
 }
 /**
  * 返回正确时间
@@ -27,24 +25,22 @@ export const getDate = (date) => {
  */
 export const getMinDate = (d, type) => {
   const mydate = new Date(d.replace(/-/g, '/'))
-  if (isNaN(mydate.getDate())) {
+  if (isNaN(mydate.getDate()))
     return d
-  }
-  if (type === 'ym') {
-    return mydate.getFullYear() + ' - ' + (mydate.getMonth() + 1)
-  } else if (type === 'md') {
-    return mydate.getMonth() + 1 + '-' + mydate.getDate()
-  } else {
-    return (mydate.getMonth() + 1 + '').padStart(2, '0')
-  }
+
+  if (type === 'ym')
+    return `${mydate.getFullYear()} - ${mydate.getMonth() + 1}`
+  else if (type === 'md')
+    return `${mydate.getMonth() + 1}-${mydate.getDate()}`
+  else
+    return (`${mydate.getMonth() + 1}`).padStart(2, '0')
 }
 // 判断是否在数组中并返回下标
 export const isInArray = (arr, value) => {
   if (arr.indexOf && typeof arr.indexOf === 'function') {
     const index = arr.indexOf(value)
-    if (index >= 0) {
+    if (index >= 0)
       return index
-    }
   }
   return false
 }
@@ -65,11 +61,11 @@ export const pickSome = (obj, arr) => {
 }
 /** String长度 */
 export const getBLen = (str) => {
-  if (str == null) {
+  if (str == null)
     return 0
-  }
+
   str += ''
-  return str.replace(/[^\x00-\xff]/g, '01').length
+  return str.replace(/[^\x00-\xFF]/g, '01').length
 }
 /** 随机 */
 export const rndNum = (n, m) => {
@@ -88,12 +84,11 @@ export const isIOS = () => {
  */
 export const isWX = () => {
   const ua = window.navigator.userAgent.toLowerCase()
-  const match = ua.match(/MicroMessenger/i) + '' || ''
-  if (match === 'micromessenger') {
+  const match = `${ua.match(/MicroMessenger/i)}` || ''
+  if (match === 'micromessenger')
     return true
-  } else {
+  else
     return false
-  }
 }
 
 export default {}

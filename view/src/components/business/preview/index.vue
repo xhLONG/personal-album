@@ -60,7 +60,8 @@ export default defineComponent({
         touches.delete(e.pointerId) // 抬起：移除触摸点
         if (touches.size <= 0) {
           isTouching = false
-        } else {
+        }
+        else {
           const touchArr = Array.from(touches)
           // 更新点位
           startPoint = { x: touchArr[0][1].clientX, y: touchArr[0][1].clientY }
@@ -68,7 +69,8 @@ export default defineComponent({
         setTimeout(() => {
           isMoving = false
         }, 300)
-        if (!isMobile) state.delay = '0.3s' // 让PC滚轮缩放更平滑，移动端则不加动画，会掉帧
+        if (!isMobile)
+          state.delay = '0.3s' // 让PC滚轮缩放更平滑，移动端则不加动画，会掉帧
       })
       window.addEventListener('pointermove', (e) => {
         if (isTouching) {
@@ -82,7 +84,8 @@ export default defineComponent({
             }
             // 更新点位
             startPoint = { x: e.clientX, y: e.clientY }
-          } else {
+          }
+          else {
             // 双指缩放
             touches.set(e.pointerId, e)
             const ratio = getDistance() / lastDistance
@@ -115,14 +118,16 @@ export default defineComponent({
     const zoom = (event) => {
       state.origin = `${event.offsetX}px ${event.offsetY}px`
 
-      if (!event.deltaY) return
+      if (!event.deltaY)
+        return
 
       event.preventDefault()
       // 缩放执行
       if (event.deltaY < 0) {
         state.scale += 0.1
         console.log('放大...')
-      } else if (event.deltaY > 0) {
+      }
+      else if (event.deltaY > 0) {
         state.scale >= 0.2 && (state.scale -= 0.1)
         console.log('缩小...')
       }
@@ -203,7 +208,8 @@ export default defineComponent({
       const { offsetWidth: w, offsetHeight: h } = originalEl
       let scale = 0
       scale = winWidth / w
-      if (h * scale > winHeight - 80) scale = (winHeight - 80) / h
+      if (h * scale > winHeight - 80)
+        scale = (winHeight - 80) / h
 
       return scale
     }
@@ -238,7 +244,8 @@ export default defineComponent({
       timer && clearTimeout(timer)
       if (!touchStamp) {
         touchStamp = new Date().getTime()
-      } else {
+      }
+      else {
         // 触发双击
         dbClick()
         touchStamp = 0
@@ -250,7 +257,8 @@ export default defineComponent({
           // isMoving ? () : (state.show = false)
           if (isMoving) {
             isMoving = false
-          } else {
+          }
+          else {
             const { top, left, width } = originInitial
             state.delay = '.3s'
             state.offset = { left, top }
@@ -268,9 +276,11 @@ export default defineComponent({
       if (isChange) {
         // 还原初始状态
         for (const key in initialData) {
-          if (Object.prototype.hasOwnProperty.call(initialData, key)) state[key] = initialData[key]
+          if (Object.prototype.hasOwnProperty.call(initialData, key))
+            state[key] = initialData[key]
         }
-      } else {
+      }
+      else {
         state.scale = state.scale + 2
       }
     }
@@ -289,7 +299,8 @@ export default defineComponent({
     // 获取距离
     function getDistance() {
       const touchArr = Array.from(touches)
-      if (touchArr.length < 2) return 0
+      if (touchArr.length < 2)
+        return 0
 
       const start = touchArr[0][1]
       const end = touchArr[1][1]
@@ -310,7 +321,9 @@ export default defineComponent({
   <Modal v-model="show" :style="{ '--delay_time': delay }">
     <div ref="wrap" :style="{ ...style, transformOrigin: origin, transform: `translate(${offset.left}px, ${offset.top}px) scale(${scale},${scale})` }" class="wrap" @click.stop="tap" />
     <div class="info">
-      <div v-for="(d, di) in details" :key="`d${di}`">{{ d.name }}: {{ d.value }}</div>
+      <div v-for="(d, di) in details" :key="`d${di}`">
+        {{ d.name }}: {{ d.value }}
+      </div>
     </div>
     <Loading v-show="isLoading" />
     <div v-show="size" class="download">

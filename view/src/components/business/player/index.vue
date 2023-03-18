@@ -1,9 +1,5 @@
-<template>
-  <div id="aplayer"></div>
-</template>
-
 <script>
-import { defineComponent, onMounted, nextTick } from 'vue'
+import { defineComponent, nextTick, onMounted } from 'vue'
 import * as api from './api'
 import loader from '@/utils/widgets/deferLoader'
 
@@ -18,7 +14,7 @@ export default defineComponent({
         ids.push(x.id)
         listObj[x.id] = { name: x.name, artist: x.ar[0] ? x.ar[0].name : '', cover: x.al.picUrl }
       }
-      let { data: audio } = await api.getUrl({ id: ids + '', realIP: '116.25.146.177' })
+      let { data: audio } = await api.getUrl({ id: `${ids}`, realIP: '116.25.146.177' })
       audio = audio.data.map((x) => {
         return Object.assign({ url: x.url }, listObj[x.id])
       })
@@ -26,7 +22,7 @@ export default defineComponent({
       setTimeout(async () => {
         await nextTick()
         const APlayer = window.APlayer
-        new APlayer({
+        const aPlayer = new APlayer({
           container: document.getElementById('aplayer'),
           fixed: true,
           autoplay: true,
@@ -42,6 +38,10 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <div id="aplayer" />
+</template>
 
 <style>
 .aplayer.aplayer-fixed .aplayer-body {

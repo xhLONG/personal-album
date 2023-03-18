@@ -1,32 +1,24 @@
-<template>
-  <div class="home">
-    <img-list @change="checkImage" :data="json" />
-    <preview ref="preview" />
-    <!-- <player /> -->
-  </div>
-</template>
-
 <script>
+import { defineComponent, reactive, toRefs } from 'vue'
 import imgList from '@/components/business/img-list'
-import { defineComponent, toRefs, reactive } from 'vue'
 import preview from '@/components/business/preview'
 import json from '@/assets/data/datalist.json'
 // import player from '@/components/business/player'
 
 export default defineComponent({
-  components: { preview, imgList,  },
+  components: { Preview: preview, ImgList: imgList },
   setup() {
     const state = reactive({
       preview: null,
-      json: json.sort(function (a, b) {
+      json: json.sort((a, b) => {
         return b.stamp - a.stamp
       }),
     })
 
     // setTimeout(() => {
-      // console.log(groupBy(state.json, 'year'))
-      // console.log(groupBy(state.json, 'month'))
-      // console.log(groupBy(state.json, 'date'))
+    // console.log(groupBy(state.json, 'year'))
+    // console.log(groupBy(state.json, 'month'))
+    // console.log(groupBy(state.json, 'date'))
     // }, 1000)
 
     function groupBy(arr, key) {
@@ -50,6 +42,14 @@ export default defineComponent({
 })
 </script>
 
+<template>
+  <div class="home">
+    <ImgList :data="json" @change="checkImage" />
+    <Preview ref="preview" />
+    <!-- <player /> -->
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .home {
   margin: 8px;
@@ -58,4 +58,3 @@ export default defineComponent({
   // height: 100vh;
 }
 </style>
-
